@@ -9,34 +9,31 @@ function Texte(texte, choise1, choise2, goto1, goto2) {
     this.p = createP(this.p).addClass('para');
     if(this.c1 != 'NULL') {
       if(this.goto1 != -3) {
-        this.c1 = createButton(this.c1).addClass('button');
-        this.c1.mousePressed(this.revealNextC1);
+        this.c1 = createButton(this.c1);
+        this.c1.addClass('button');
+        this.c1.mousePressed(revealNext);
         this.c1.next = this.goto1;
       }else {
         this.c1 = createButton(this.c1).addClass('end');
-        this.c1.mousePressed(this.reload);
+        this.c1.mousePressed(reload);
       }
     }
     if(this.c2 != 'NULL') {
-      this.c2 = createButton(this.c2).addClass('button');
-      this.c2.mousePressed(this.revealNextC2);
+      this.c2 = createButton(this.c2);
+      this.c2.addClass('button');
+      this.c2.mousePressed(revealNext);
       this.c2.next = this.goto2;
     } 
   }
 
-  this.revealNextC1 = function() {
-    let next = this.next;
-    textes[next].display();
-    window.scrollTo(0,document.body.scrollHeight);
-  }
+  
+}
 
-  this.revealNextC2 = function(index) {
-    let next = this.next;
-    textes[next].display();
-    window.scrollTo(0,document.body.scrollHeight);
-  }
+function reload() {
+  window.location.reload();
+}
 
-  this.reload = function() {
-    window.location.reload();
-  }
+function revealNext() {
+  textes[this.next].display();
+  window.scrollTo(0,document.body.scrollHeight);
 }

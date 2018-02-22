@@ -38,5 +38,14 @@ function setup() {
     textes.push(new Texte(paragraphe[i], choix1[i], choix2[i], go1[i], go2[i]));
   }
   textes[0].display();
-  console.log(document.getElementsByTagName("p"));
+}
+
+function draw() {
+  for (var i = 0; i < document.body.children.length; i++) {
+    let element = document.body.children[i];
+    let x = document.body.children[i].innerHTML;
+    if(x == "[object Object]") {
+      element.remove();
+    }
+  }
 }
