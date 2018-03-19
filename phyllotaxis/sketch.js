@@ -1,6 +1,8 @@
-var c = 0.6;
-var n = 0;
-var a = 137.5;
+let c = 0.6;
+let n = 0;
+let a = 137.5;
+
+let array = [];
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -10,13 +12,20 @@ function setup() {
 }
 
 function draw() {
-   translate(width / 2, height / 2);
-    var angle = n * a;
-    var r = c * sqrt(angle);
-    var x = r * cos(angle);
-    var y = r * sin(angle);
-    fill((angle - n) % 256, 255, 255);
-    stroke((angle - n) % 256, 255, 255);
-    ellipse(x, y, 10, 10);
-    n++;
+  background(0);
+  translate(width / 2, height / 2);
+  let angle = n * a;
+  let r = c * sqrt(angle);
+  let x = r * cos(angle);
+  let y = r * sin(angle);
+  n++;
+  array.push(new Seed(x, y, (angle - n) % 361, 255, 255));
+
+  for(let seed of array) {
+    seed.display();
+  }
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
 }

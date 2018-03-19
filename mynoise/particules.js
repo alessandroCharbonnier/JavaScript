@@ -1,4 +1,4 @@
-var particules = []
+let particules = []
 
 function Particule() {
   this.pos = createVector(random(1, width), random(1, height))
@@ -13,7 +13,7 @@ function Particule() {
   }
 
   this.applyforce = function() {
-    var pospixel = round(this.pos.x * this.pos.y)
+    let pospixel = round(this.pos.x * this.pos.y)
     this.vel = pixelvector[pospixel].copy()
   }
 

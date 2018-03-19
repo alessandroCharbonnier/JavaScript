@@ -49,13 +49,13 @@ Cell.prototype.countMines = function(){
 	if (this.mine){
 		return -1;
 	}
-	var total = 0;
-	for(var xoff = -1; xoff <= 1; xoff++){
-		for(var yoff = -1; yoff <= 1; yoff++){
-			var i = this.i + xoff;
-			var j = this.j + yoff;
+	let total = 0;
+	for(let xoff = -1; xoff <= 1; xoff++){
+		for(let yoff = -1; yoff <= 1; yoff++){
+			let i = this.i + xoff;
+			let j = this.j + yoff;
 			if (i > -1 && i < cols && j > -1 && j < rows){
-				var neighboor = grid[i][j];
+				let neighboor = grid[i][j];
 				if (neighboor.mine){
 					total++;
 				}
@@ -66,12 +66,12 @@ Cell.prototype.countMines = function(){
 }
 
 Cell.prototype.floodfill = function() {
-	for(var xoff = -1; xoff <= 1; xoff++){
-		for(var yoff = -1; yoff <= 1; yoff++){
-			var i = this.i + xoff;
-			var j = this.j + yoff;
+	for(let xoff = -1; xoff <= 1; xoff++){
+		for(let yoff = -1; yoff <= 1; yoff++){
+			let i = this.i + xoff;
+			let j = this.j + yoff;
 			if (i > -1 && i < cols && j > -1 && j < rows){
-				var neighboor = grid[i][j];
+				let neighboor = grid[i][j];
 				if (!neighboor.mine && !neighboor.revealed){
 					neighboor.reveal()
 				}

@@ -10,9 +10,11 @@
 }
 
 body {
-  width: 100%;
   background-image: url('../images/fond.jpg');
   background-attachment: fixed;
+  height: 100%;
+  width: auto;
+  font-size: 20px;
 }
 
 button {
@@ -33,7 +35,7 @@ button {
 
 .para {
   text-align: left;
-  margin: 1% 20% 1% 20%;
+  margin: 1% 28% 1% 28%;
   padding: 10px;
   background-color: grey;
 }

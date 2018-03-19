@@ -25,8 +25,6 @@ function Texte(texte, choise1, choise2, goto1, goto2) {
       this.c2.next = this.goto2;
     } 
   }
-
-  
 }
 
 function reload() {
