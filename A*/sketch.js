@@ -66,6 +66,10 @@ function draw() {
     document.getElementById('pTime').innerHTML = getCurrentTime();
   }
 
+  if (document.getElementById('fps').checked) {
+    document.getElementById('pfps').innerHTML = floor(frameRate());
+  }
+
   if (openSet.length > 0) {
     let lowestIndex = 0;
     for (let i = 0; i < openSet.length; i++) {
