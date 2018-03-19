@@ -1,5 +1,5 @@
-let cols = 50;
-let rows = 50;
+let cols;
+let rows;
 let w, h;
 let grid = new Array(cols);
 let path = [];
@@ -10,12 +10,27 @@ let start;
 let end;
 let current;
 
+let img;
+let pathWidth;
+let displayClosedSet;
+let imgNumber;
+
+let dateStart = new Date;
+let timeStart = dateStart.getTime();
+
+function preload() {
+  choseImage();
+}
+
 function setup() {
-  if (windowWidth > windowHeight) {
-    createCanvas(windowHeight, windowHeight);
-  }else {
-    createCanvas(windowWidth, windowWidth);
-  }
+  createCanvas(img.width, img.height);
+
+  pathWidth = createSlider(1, 4, 2);
+
+  rectMode(CENTER);
+
+  cols = img.width;
+  rows = img.height;
   w = width / cols;
   h = height / rows;
 
@@ -24,10 +39,9 @@ function setup() {
     grid[i] = new Array();
   }
 
-  //adding spots to the grid
-  for (let i = 0; i < cols; i++) {
-    for (let j = 0; j < rows; j++) {
-      grid[i][j] = new Spot(i, j);
+  for (let i = 0; i < img.width; i++) {
+    for (let j = 0; j < img.height; j++) {
+      grid[i][j] = new Spot(i, j, img.get(i, j));
     }
   }
 
@@ -37,15 +51,20 @@ function setup() {
     }
   }
 
-  start = grid[0][0];
-  end = grid[cols - 1][rows - 1];
+  setStart();
+
   start.wall = false;
   end.wall = false;
 
   openSet.push(start);
+  dateStart.getTime();
 }
 
 function draw() {
+
+  if (document.getElementById('time').checked) {
+    document.getElementById('pTime').innerHTML = getCurrentTime();
+  }
 
   if (openSet.length > 0) {
     let lowestIndex = 0;
@@ -58,8 +77,9 @@ function draw() {
     current = openSet[lowestIndex];
 
     if (current === end) {
-      noLoop();
       console.log('done!');
+      displayGrid();
+      noLoop();
     }
 
     removeFrom(openSet, current);
@@ -92,25 +112,10 @@ function draw() {
 
   }else {
     console.log("No Solutions");
+    displayGrid();
     noLoop();
     return;
   }
-
-  background(0);
-
-  for (let i = 0; i < cols; i++) {
-    for (let j = 0; j < rows; j++) {
-      grid[i][j].show(color(255));
-    }
-  }
-
-  // for (let i = 0; i < openSet.length; i++) {
-  //   openSet[i].show(color(0, 255, 0));
-  // }
-  //
-  // for (let i = 0; i < closedSet.length; i++) {
-  //   closedSet[i].show(color(255, 0, 0));
-  // }
 
   path = [];
   let temp = current;
@@ -120,13 +125,24 @@ function draw() {
     temp = temp.previous;
   }
 
+  //display
+
+  image(img, 0, 0);
+
+  if(document.getElementById('closedSet').checked) {
+    displayGrid();
+  }
+
   noFill();
   stroke(0, 0, 255);
-  strokeWeight(5);
+  strokeWeight(pathWidth.value());
   beginShape();
-    for (var i = 0; i < path.length; i++) {
-      vertex(path[i].x * w + w * 0.5, path[i].y * h + h * 0.5)
-    }
+  for (var i = 0; i < path.length; i++) {
+    vertex(path[i].x * w + w * 0.5, path[i].y * h + h * 0.5)
+  }
   endShape();
+
+  start.show(color(255, 0, 0));
+  end.show(color(255, 0, 0));
 
 }
