@@ -6,8 +6,8 @@ function choseImage() {
 function setStart() {
   switch (imgNumber) {
     case 0:
-      start = grid[512][743];
-      end = grid[513][411];
+      start = grid[513][411];
+      end = grid[512][743];
       return ;
     case 1:
       start = grid[1][1];
@@ -58,6 +58,5 @@ function getCurrentTime() {
   var second = floor(seconds % 60);
   var minutes = floor(seconds / 60);
   var hours = floor(minutes / 60);
-  console.log(timeStart)
   return (hours + "H " + minutes + "M " + second + "s " + millissecs + "ms");
 }

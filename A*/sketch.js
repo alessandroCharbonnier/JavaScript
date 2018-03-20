@@ -81,9 +81,9 @@ function draw() {
     current = openSet[lowestIndex];
 
     if (current === end) {
+      noLoop();
       console.log('done!');
       displayGrid();
-      noLoop();
     }
 
     removeFrom(openSet, current);
@@ -115,9 +115,9 @@ function draw() {
     }
 
   }else {
+    noLoop();
     console.log("No Solutions");
     displayGrid();
-    noLoop();
     return;
   }
 
@@ -128,6 +128,8 @@ function draw() {
     path.push(temp.previous);
     temp = temp.previous;
   }
+
+  document.getElementById('length').innerHTML = "path length :" + path.length;
 
   //display
 
