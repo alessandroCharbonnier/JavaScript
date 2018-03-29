@@ -17,6 +17,7 @@ let imgNumber;
 
 let dateStart = new Date;
 let timeStart = dateStart.getTime();
+let heads = [];
 
 function preload() {
   choseImage();
@@ -47,7 +48,7 @@ function setup() {
 
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
-      grid[i][j].addNeighbors(grid);
+      grid[i][j].addneighbours(grid);
     }
   }
 
@@ -58,6 +59,10 @@ function setup() {
 
   openSet.push(start);
   dateStart.getTime();
+
+  for (var i = 0; i < 50; i++) {
+    heads.push(new Head());
+  }
 }
 
 function draw() {
@@ -70,85 +75,17 @@ function draw() {
     document.getElementById('pfps').innerHTML = floor(frameRate());
   }
 
-  if (openSet.length > 0) {
-    let lowestIndex = 0;
-    for (let i = 0; i < openSet.length; i++) {
-      if(openSet[i].f < openSet[lowestIndex].f) {
-        lowestIndex = i;
-      }
-    }
-
-    current = openSet[lowestIndex];
-
-    if (current === end) {
-      noLoop();
-      console.log('done!');
-      displayGrid();
-    }
-
-    removeFrom(openSet, current);
-    closedSet.push(current);
-
-    let neighbors = current.neighbors;
-    for (let i = 0; i < neighbors.length; i++) {
-      let neighbor = neighbors[i];
-      if (!closedSet.includes(neighbor) && !neighbor.wall) {
-        let tempG = current.g + 1;
-
-        let newPath = false;
-        if (openSet.includes(neighbor)) {
-          if (tempG < neighbor.g) {
-            neighbor.g = tempG;
-            newPath = true;
-          }
-        } else {
-          neighbor.g = tempG;
-          newPath = true;
-          openSet.push(neighbor);
-        }
-        if (newPath) {
-          neighbor.h = heuristic(neighbor, end);
-          neighbor.f = neighbor.g + neighbor.h;
-          neighbor.previous = current;
-        }
-      }
-    }
-
-  }else {
-    noLoop();
-    console.log("No Solutions");
-    displayGrid();
-    return;
-  }
-
-  path = [];
-  let temp = current;
-  path.push(temp);
-  while (temp.previous) {
-    path.push(temp.previous);
-    temp = temp.previous;
-  }
-
-  document.getElementById('length').innerHTML = "path length :" + path.length;
-
-  //display
-
   image(img, 0, 0);
+
+  for (head of heads) {
+    head.run();
+    document.getElementById('length').innerHTML = "this.path length :" + head.path.length;
+  }
 
   if(document.getElementById('closedSet').checked) {
     displayGrid();
   }
 
-  noFill();
-  stroke(0, 0, 255);
-  strokeWeight(pathWidth.value());
-  beginShape();
-  for (var i = 0; i < path.length; i++) {
-    vertex(path[i].x * w + w * 0.5, path[i].y * h + h * 0.5)
-  }
-  endShape();
-
   start.show(color(255, 0, 0));
   end.show(color(255, 0, 0));
-
 }

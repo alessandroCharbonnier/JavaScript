@@ -8,7 +8,7 @@ function Spot(x, y, color) {
 
   this.color = [];
   this.color = color;
-  this.neighbors = [];
+  this.neighbours = [];
   this.previous = undefined;
   this.wall = false;
 
@@ -22,30 +22,30 @@ function Spot(x, y, color) {
     rect(this.x*w, this.y*h, 5, 5);
   }
 
-  this.addNeighbors = function(grid) {
+  this.addneighbours = function(grid) {
     if (this.x < cols - 1) {
-      this.neighbors.push(grid[this.x + 1][this.y]);
+      this.neighbours.push(grid[this.x + 1][this.y]);
     }
     if (this.x > 0) {
-      this.neighbors.push(grid[this.x - 1][this.y]);
+      this.neighbours.push(grid[this.x - 1][this.y]);
     }
     if (this.y < rows - 1) {
-      this.neighbors.push(grid[this.x][this.y + 1]);
+      this.neighbours.push(grid[this.x][this.y + 1]);
     }
     if (this.y > 0) {
-      this.neighbors.push(grid[this.x][this.y - 1]);
+      this.neighbours.push(grid[this.x][this.y - 1]);
     }
     if (this.x > 0 && this.y > 0) {
-      this.neighbors.push(grid[this.x - 1][this.y - 1]);
+      this.neighbours.push(grid[this.x - 1][this.y - 1]);
     }
     if (this.x < cols - 1 && this.y > 0) {
-      this.neighbors.push(grid[this.x + 1][this.y - 1]);
+      this.neighbours.push(grid[this.x + 1][this.y - 1]);
     }
     if (this.x > 0 && this.y < rows - 1) {
-      this.neighbors.push(grid[this.x - 1][this.y + 1]);
+      this.neighbours.push(grid[this.x - 1][this.y + 1]);
     }
     if (this.x < cols - 1 && this.y < rows - 1) {
-      this.neighbors.push(grid[this.x + 1][this.y + 1]);
+      this.neighbours.push(grid[this.x + 1][this.y + 1]);
     }
   }
 }
