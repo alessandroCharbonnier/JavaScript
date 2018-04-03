@@ -1,5 +1,5 @@
 function choseImage() {
-  imgNumber = floor(random(0, 3));
+  imgNumber = 0/*floor(random(0, 3))*/;
   img = loadImage('images/img' + imgNumber + '.png');
 }
 
@@ -53,10 +53,11 @@ function displayGrid() {
 function getCurrentTime() {
   let dateStop = new Date;
   let timeStop = dateStop.getTime();
-  var millissecs = (timeStop - timeStart) % 1000;
-  var seconds = floor((timeStop - timeStart) / 1000);
-  var second = floor(seconds % 60);
-  var minutes = floor(seconds / 60);
-  var hours = floor(minutes / 60);
-  return (hours + "H " + minutes + "M " + second + "s " + millissecs + "ms");
+  let millissecs = (timeStop - timeStart) % 1000;
+  let seconds = floor((timeStop - timeStart) / 1000);
+  let second = seconds % 60;
+  let minutes = floor(seconds / 60);
+  let minute = minutes % 60;
+  let hours = floor(minutes / 60);
+  return (hours + "H " + minute + "M " + second + "s " + millissecs + "ms");
 }

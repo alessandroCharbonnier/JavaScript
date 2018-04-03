@@ -1,6 +1,7 @@
 let txt;
 let name;
-let accuracy;
+let panelWidth = 640;
+let accuracy = 100.0;
 let score = 0;
 let clicks = 0;
 let ex = false;
@@ -18,28 +19,35 @@ function setup() {
   loadScores();
   getHeightScore();
   name = askName();
-  createCanvas(640, windowHeight);
+  createCanvas(windowWidth, windowHeight);
   for (let i = 0; i < 6; i++) {
     bubbles[i] = new Bubble(i);
   }
+  textSize(20);
 }
 
 function draw() {
-  background(0)
+  background(255);
+  fill(0);
+  noStroke();
+  rect((width / 2) - (panelWidth / 2), 0, panelWidth, height);
   for (let i = 0; i < bubbles.length; i++) {
     if (!ex) {
       bubbles[i].move();
       bubbles[i].disp();
-      textSize(50);
-      fill(0, 255, 255);
-      text(score, 10, 45);
     } else {
+      textSize(20);
       noLoop();
-      accuracy = getAccuracy(clicks, score);
+      accuracy = getAccuracy();
       writeScore(name, score, accuracy);
       break;
     }
   }
+
+  fill(0);
+  text(score, 10, 45);
+  text("accuracy : " + getAccuracy()  + "%", 10, 80);
+  text("speed :" + bubbles[0].speed.toFixed(3), 10, 115);
 }
 
 function mousePressed() {

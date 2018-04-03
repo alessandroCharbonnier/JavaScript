@@ -3,7 +3,7 @@ function Head() {
     if (openSet.length > 0) {
       this.lowestIndex = 0;
       for (let i = 0; i < openSet.length; i++) {
-        if(openSet[i].f < openSet[this.lowestIndex].f) {
+        if (openSet[i].f < openSet[this.lowestIndex].f) {
           this.lowestIndex = i;
         }
       }
@@ -44,7 +44,7 @@ function Head() {
         }
       }
 
-    }else {
+    } else {
       noLoop();
       console.log("No Solutions");
       displayGrid();
@@ -58,22 +58,5 @@ function Head() {
       this.path.push(temp.previous);
       temp = temp.previous;
     }
-
-    document.getElementById('length').innerHTML = "this.path length :" + this.path.length;
-
-    //display
-
-    if(document.getElementById('closedSet').checked) {
-      displayGrid();
-    }
-
-    noFill();
-    stroke(0, 0, 255);
-    strokeWeight(pathWidth.value());
-    beginShape();
-    for (var i = 0; i < this.path.length; i++) {
-      vertex(this.path[i].x * w + w * 0.5, this.path[i].y * h + h * 0.5)
-    }
-    endShape();
   }
 }

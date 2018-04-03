@@ -60,7 +60,7 @@ function setup() {
   openSet.push(start);
   dateStart.getTime();
 
-  for (var i = 0; i < 50; i++) {
+  for (var i = 0; i < 150; i++) {
     heads.push(new Head());
   }
 }
@@ -79,8 +79,26 @@ function draw() {
 
   for (head of heads) {
     head.run();
-    document.getElementById('length').innerHTML = "this.path length :" + head.path.length;
   }
+
+  for (let i = 1; i < heads.length - 1; i++) {
+    for (let j = 0; j < heads.length; j++) {
+      if (heads[i] !== heads[j] && heads[i].path.length > heads[j].path.length) {
+        path = heads[i].path;
+      }
+    }
+  }
+
+  noFill();
+  stroke(0, 0, 255);
+  strokeWeight(pathWidth.value());
+  beginShape();
+  for (var i = 0; i < path.length; i++) {
+    vertex(path[i].x * w + w * 0.5, path[i].y * h + h * 0.5)
+  }
+  endShape();
+
+  document.getElementById('length').innerHTML = "path length :" + path.length;
 
   if(document.getElementById('closedSet').checked) {
     displayGrid();

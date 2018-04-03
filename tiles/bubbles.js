@@ -1,7 +1,7 @@
 function Bubble(t) {
-  this.d = width / 5;
+  this.d = panelWidth / 5;
   this.r = this.d / 2;
-  this.x = random(width / 5, width - (width / 5));
+  this.x = random(width / 2 - panelWidth / 2 + panelWidth / 5, width / 2 + panelWidth / 2 - (width / 5));
   this.y = (-height / 5) * t;
   this.speed = 5;
   this.col = color(255);
@@ -29,7 +29,7 @@ function Bubble(t) {
     this.y += this.speed;
     if ((this.y > height + this.r) && (this.click)) {
       this.click = !this.click;
-      this.x = random(width / 5, width - width / 5);
+      this.x = random(width / 2 - panelWidth / 2 + panelWidth / 5, width / 2 + panelWidth / 2 - (width / 5));
       this.y = (-height / 5);
       this.col = color(255);
 
@@ -39,7 +39,7 @@ function Bubble(t) {
       fill(255, 0, 0);
       textSize(50);
       text("perdu", width / 2 - 100, 100);
-      text("score de : " + score, 50, 500);
+      text("score de : " + score, width/2 - 100, 500);
     }
   }
 }

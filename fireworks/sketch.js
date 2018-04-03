@@ -22,8 +22,8 @@ function draw() {
     fireworks[i].show()
     fireworks[i].update()
     if (fireworks[i].yspeed >= 0) {
-      for (let j = 0; j < random(8, 101); j++) {
-        particules.push(new Particule(fireworks[i].pos.x, fireworks[i].pos.y, fireworks[i].col, fireworks[i].r))        
+      for (let j = 0; j < random(8, 200); j++) {
+        particules.push(new Particule(fireworks[i].pos.x, fireworks[i].pos.y, fireworks[i].col, fireworks[i].r))
       }
         fireworks.splice(i, 1)
     }

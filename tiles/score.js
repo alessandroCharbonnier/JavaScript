@@ -12,7 +12,7 @@ function loadScores() {
         break;
       default:
         console.log("something went wrong !!!\nHearth will explode soon.");
-    } 
+    }
   }
 }
 
@@ -39,6 +39,6 @@ function writeScore(_name, _score, _accuracy) {
   //saveStrings(tmp, "score.txt");
 }
 
-function getAccuracy(_clicks, _score) {
-  return _score / _clicks * 100;
+function getAccuracy() {
+  return (score / clicks * 100).toFixed(2);
 }
