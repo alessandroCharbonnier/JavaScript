@@ -55,7 +55,7 @@ Cell.prototype.countMines = function(){
 			let ioff = this.i + xoff;
 			let joff = this.j + yoff;
 			if (ioff > -1 && ioff < cols && joff > -1 && joff < rows){
-				let neighboor = grid[i][j];
+				let neighboor = grid[ioff][joff];
 				if (neighboor.mine){
 					total++;
 				}
@@ -71,7 +71,7 @@ Cell.prototype.floodfill = function() {
 			let ioff = this.i + xoff;
 			let joff = this.j + yoff;
 			if (ioff > -1 && ioff < cols && joff > -1 && joff < rows){
-				let neighboor = grid[i][j];
+				let neighboor = grid[ioff][joff];
 				if (!neighboor.mine && !neighboor.revealed){
 					neighboor.reveal()
 				}
