@@ -1,5 +1,5 @@
 function choseImage() {
-  imgNumber = 0/*floor(random(0, 3))*/;
+  imgNumber = floor(random(0, 3));
   img = loadImage('images/img' + imgNumber + '.png');
 }
 
