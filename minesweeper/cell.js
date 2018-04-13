@@ -4,7 +4,7 @@ function Cell(i, j, w){
 	this.x = i * w;
 	this.y = j * w;
 	this.w = w
-	this.neighboorCount = 0;
+	this.neighbourCount = 0;
 
 	if (random(1) < 0.15){
 	this.mine = true;
@@ -25,10 +25,10 @@ Cell.prototype.show = function(){
 		}else {
 			fill(150);
 			rect(this.x, this.y, this.w, this.w );
-			if (this.neighboorCount > 0){
+			if (this.neighbourCount > 0){
 				textAlign(CENTER);
 				fill(0);
-				text(this.neighboorCount, this.x + this.w * 0.5, this.y + this.w * 0.5)
+				text(this.neighbourCount, this.x + this.w * 0.5, this.y + this.w * 0.5)
 			}
 		}
 	}
@@ -40,7 +40,7 @@ Cell.prototype.contains = function(x, y){
 
 Cell.prototype.reveal = function(x, y){
 	this.revealed = true;
-	if (this.neighboorCount == 0 && !this.mine){
+	if (this.neighbourCount == 0 && !this.mine){
 		this.floodfill();
 	}
 }
@@ -52,28 +52,28 @@ Cell.prototype.countMines = function(){
 	let total = 0;
 	for(let xoff = -1; xoff <= 1; xoff++){
 		for(let yoff = -1; yoff <= 1; yoff++){
-			let ioff = this.i + xoff;
-			let joff = this.j + yoff;
-			if (ioff > -1 && ioff < cols && joff > -1 && joff < rows){
-				let neighboor = grid[ioff][joff];
-				if (neighboor.mine){
+			let i = this.i + xoff;
+			let j = this.j + yoff;
+			if (i > -1 && i < cols && j > -1 && j < rows){
+				let neighbour = grid[i][j];
+				if (neighbour.mine){
 					total++;
 				}
 			}
 		}
 	}
-	this.neighboorCount = total;
+	this.neighbourCount = total;
 }
 
 Cell.prototype.floodfill = function() {
 	for(let xoff = -1; xoff <= 1; xoff++){
 		for(let yoff = -1; yoff <= 1; yoff++){
-			let ioff = this.i + xoff;
-			let joff = this.j + yoff;
-			if (ioff > -1 && ioff < cols && joff > -1 && joff < rows){
-				let neighboor = grid[ioff][joff];
-				if (!neighboor.mine && !neighboor.revealed){
-					neighboor.reveal()
+			let i = this.i + xoff;
+			let j = this.j + yoff;
+			if (i > -1 && i < cols && j > -1 && j < rows){
+				let neighbour = grid[i][j];
+				if (!neighbour.mine && !neighbour.revealed){
+					neighbour.reveal()
 				}
 			}
 		}

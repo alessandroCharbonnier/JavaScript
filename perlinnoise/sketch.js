@@ -113,4 +113,5 @@ function Particle() {
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
+  background(51);
 }
