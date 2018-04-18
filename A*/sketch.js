@@ -100,7 +100,7 @@ function draw() {
 
   document.getElementById('length').innerHTML = "path length :" + path.length;
 
-  if(document.getElementById('closedSet').checked) {
+  if (document.getElementById('closedSet').checked) {
     displayGrid();
   }
 

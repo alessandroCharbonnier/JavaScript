@@ -19,7 +19,7 @@ function Spot(x, y, color) {
   this.show = function(col) {
     fill(col);
     noStroke();
-    rect(this.x*w, this.y*h, 5, 5);
+    rect(this.x * w, this.y * h, 5, 5);
   }
 
   this.addneighbours = function(grid) {

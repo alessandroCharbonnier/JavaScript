@@ -8,24 +8,24 @@ function setStart() {
     case 0:
       start = grid[513][411];
       end = grid[512][743];
-      return ;
+      return;
     case 1:
       start = grid[1][1];
       end = grid[img.height - 2][img.height - 2];
-      return ;
+      return;
     case 2:
       start = grid[1][1];
       end = grid[534][593];
-      return ;
+      return;
     default:
       console.log('switch statement is wrong');
       noLoop();
-    return;
+      return;
   }
 }
 
 function removeFrom(array, element) {
-  for(let i = array.length - 1; i >= 0; i--) {
+  for (let i = array.length - 1; i >= 0; i--) {
     if (array[i] == element) {
       array.splice(i, 1);
     }

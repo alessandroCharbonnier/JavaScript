@@ -1,6 +1,6 @@
 function loadScores() {
   for (var i = 0; i < txt.length; i++) {
-    switch(i % 3) {
+    switch (i % 3) {
       case 0:
         usersNames.push(txt[i]);
         break;
@@ -19,7 +19,7 @@ function loadScores() {
 function getHeightScore() {
   let heightscore = -1;
   for (var i = 0; i < usersScores.length; i++) {
-    if(usersScores[i] > heightscore) {
+    if (usersScores[i] > heightscore) {
       heightscore = usersScores[i];
     }
   }
@@ -30,13 +30,14 @@ function askName() {
   return name;
 }
 
-function writeScore(_name, _score, _accuracy) {
+function writeScore(data) {
   let tmp = [];
   tmp[0] = _name;
   tmp[1] = _score.toString();
   tmp[2] = _accuracy.toString();
   console.log("tmp = " + tmp);
   //saveStrings(tmp, "score.txt");
+  socket.emit('end', data);
 }
 
 function getAccuracy() {

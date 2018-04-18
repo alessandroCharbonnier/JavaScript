@@ -25,18 +25,18 @@ function Head() {
         if (!closedSet.includes(this.neighbour) && !this.neighbour.wall) {
           this.tempG = this.current.g + 1;
 
-          this.newpath = false;
+          this.newPath = false;
           if (openSet.includes(this.neighbour)) {
             if (this.tempG < this.neighbour.g) {
               this.neighbour.g = this.tempG;
-              this.newpath = true;
+              this.newPath = true;
             }
           } else {
             this.neighbour.g = this.tempG;
-            this.newpath = true;
+            this.newPath = true;
             openSet.push(this.neighbour);
           }
-          if (this.newpath) {
+          if (this.newPath) {
             this.neighbour.h = heuristic(this.neighbour, end);
             this.neighbour.f = this.neighbour.g + this.neighbour.h;
             this.neighbour.previous = this.current;
