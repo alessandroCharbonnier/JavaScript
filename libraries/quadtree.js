@@ -1,10 +1,23 @@
 class Point {
-	constructor(element) {
-		if (!element.x || !element.y) {
-			throw TypeError('the element passed has argument should have variables called x and y');
+	constructor(x, y, userData) {
+		if (typeof x !== 'number') {
+			throw TypeError(`element.x should be a number but is a ${typeof element.x}`);
 		}
-		this.x = element.x;
-		this.y = element.y;
+		if (typeof y !== 'number') {
+			throw TypeError(`element.y should be a number but is a ${typeof element.y}`);
+		}
+
+		this.x = x;
+		this.y = y;
+		if (userData) {
+			this.userData = userData;
+		}
+	}
+
+	show(r, g, b) {
+		noStroke();
+		fill(r, g, b);
+		ellipse(this.x, this.y, 4, 4);
 	}
 }
 
@@ -29,6 +42,7 @@ class Circle {
 		if (!(point instanceof Point)) {
 			throw TypeError('make sure to pass to \'contains\' a Point type variable');
 		}
+		point.show(0, 0, 255);
 		let d = Math.pow((point.x - this.x), 2) + Math.pow((point.y - this.y), 2);
 		return d <= this.rSquared;
 	}
@@ -53,6 +67,12 @@ class Circle {
 
 		// intersection on the edge of the circle
 		return edges <= this.rSquared;
+	}
+
+	show(r, g, b) {
+		noFill();
+		stroke(r, g, b);
+		ellipse(this.x, this.y, this.r * 2, this.r * 2);
 	}
 }
 
@@ -80,25 +100,28 @@ class Rectangle {
 		if (!(point instanceof Point)) {
 			throw TypeError('make sure to pass to \'contains\' a Point type variable');
 		}
-		return (
-			point.x >= this.x - this.x &&
+		point.show(0, 0, 255);
+		return (point.x >= this.x - this.w &&
 			point.x <= this.x + this.w &&
 			point.y >= this.y - this.h &&
-			point.y <= this.y + this.h
-		);
+			point.y <= this.y + this.h);
 	}
 
 	intersects(range) {
 		if (!((range instanceof Rectangle) || (range instanceof Circle))) {
 			throw TypeError('make sure to pass to \'intersects\' a Rectangle or Circle type variable');
 		}
-		return !(
-			range.x - range.w > this.x + this.w ||
+		return !(range.x - range.w > this.x + this.w ||
 			range.x + range.w < this.x - this.w ||
 			range.y - range.h > this.y + this.h ||
-			range.y + range.h < this.y - this.h
-		);
+			range.y + range.h < this.y - this.h);
+	}
 
+	show(r, g, b) {
+		noFill();
+		stroke(r, g, b);
+		rectMode(CENTER);
+		rect(this.x, this.y, this.w * 2, this.h * 2);
 	}
 }
 
@@ -123,6 +146,7 @@ class QuadTree {
 		this.capacity = capacity;
 		this.points = [];
 		this.divided = false;
+		this.length = 0;
 	}
 
 	subdivide() {
@@ -130,7 +154,7 @@ class QuadTree {
 		this.northEast = new QuadTree(new Rectangle(this.boundary.x + this.boundary.w / 2, this.boundary.y - this.boundary.h / 2, this.boundary.w / 2, this.boundary.h / 2), this.capacity);
 		this.southWest = new QuadTree(new Rectangle(this.boundary.x - this.boundary.w / 2, this.boundary.y + this.boundary.h / 2, this.boundary.w / 2, this.boundary.h / 2), this.capacity);
 		this.southEast = new QuadTree(new Rectangle(this.boundary.x + this.boundary.w / 2, this.boundary.y + this.boundary.h / 2, this.boundary.w / 2, this.boundary.h / 2), this.capacity);
-		this.subdivide = true;
+		this.divided = true;
 	}
 
 	insert(point) {
@@ -143,19 +167,20 @@ class QuadTree {
 
 		if (this.points.length < this.capacity) {
 			this.points.push(point);
+			this.length++;
+			console.log(this.size());
 			return true;
+		} else {
+			if (!this.divided) {
+				this.subdivide();
+			}
+			return (
+				this.northWest.insert(point) ||
+				this.northEast.insert(point) ||
+				this.southWest.insert(point) ||
+				this.southEast.insert(point)
+			);
 		}
-
-		if (!this.divided) {
-			this.subdivide();
-		}
-
-		return (
-			this.northwest.insert(point) ||
-			this.northeast.insert(point) ||
-			this.southwest.insert(point) ||
-			this.southeast.insert(point)
-		);
 	}
 
 	query(range, founds) {
@@ -166,7 +191,7 @@ class QuadTree {
 		if (!founds) {
 			founds = [];
 		}
-		if (!this.boundary.intersects(range)) {
+		if (!range.intersects(this.boundary)) {
 			return founds;
 		}
 
@@ -183,12 +208,21 @@ class QuadTree {
 		}
 		return founds;
 	}
+
+	size() {
+		return this.length;
+	}
+
+	show(r, g, b) {
+		noFill();
+		stroke(r, g, b);
+		rectMode(CENTER);
+		rect(this.boundary.x, this.boundary.y, this.boundary.w * 2, this.boundary.h * 2);
+		if (this.divided) {
+			this.northWest.show();
+			this.northEast.show();
+			this.southWest.show();
+			this.southEast.show();
+		}
+	}
 }
-
-
-((module ? module.exports = {
-	Point,
-	Rectangle,
-	QuadTree,
-	Circle
-} : 0));
