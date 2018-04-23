@@ -1,23 +1,26 @@
-function Particule(x, y, r) {
-	this.x = x;
-	this.y = y;
-	this.r = r;
-	this.highlight = false;
+class Particule {
+	constructor(x, y, r) {
+		this.x = x;
+		this.y = y;
+		this.r = r;
+		this.highlight = false;
+	}
 
-	this.setHighlight = function(value) {
+
+	setHighligh(value) {
 		this.highlight = value;
 	}
 
-	this.move = function() {
+	move() {
 		this.x += random(-2, 2) % width;
 		this.y += random(-2, 2) % height;
 	}
 
-	this.intersects = function(other) {
+	intersects(other) {
 		return (dist(this.x, this.y, other.x, other.y) < this.r + other.r);
 	}
 
-	this.show = function() {
+	show() {
 		if (this.highlight) {
 			fill(255, 0, 255);
 		} else {
