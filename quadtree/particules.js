@@ -1,12 +1,29 @@
-function Particule(x, y, w, h) {
+function Particule(x, y, r) {
 	this.x = x;
 	this.y = y;
-	this.w = w;
-	this.h = h;
+	this.r = r;
+	this.highlight = false;
+
+	this.setHighlight = function(value) {
+		this.highlight = value;
+	}
+
+	this.move = function() {
+		this.x += random(-2, 2) % width;
+		this.y += random(-2, 2) % height;
+	}
+
+	this.intersects = function(other) {
+		return (dist(this.x, this.y, other.x, other.y) < this.r + other.r);
+	}
 
 	this.show = function() {
-		fill(255, 255, 255, 50);
-		stroke(255);
-		ellipse(this.x, this.y, this.w, this.w);
+		if (this.highlight) {
+			fill(255, 0, 255);
+		} else {
+			fill(255);
+		}
+		noStroke();
+		ellipse(this.x, this.y, this.r * 2, this.r * 2);
 	}
 }

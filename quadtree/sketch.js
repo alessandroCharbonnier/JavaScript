@@ -1,49 +1,52 @@
 let qtree;
-let points = [];
+let particules = [];
 let inRange = [];
 let boundary;
-let range;
 
 function setup() {
 	createCanvas(windowWidth, windowHeight);
-	range = new Rectangle(width / 2, height / 2, 200, 200);
 	boundary = new Rectangle(width / 2, height / 2, width / 2, height / 2);
-	qtree = new QuadTree(boundary, 1);
+	qtree = new QuadTree(boundary, 5);
 	for (let i = 0; i < 1000; i++) {
-		let point = new Point(random(width), random(height));
-		qtree.insert(point);
-		points.push(point);
+		let particule = new Particule(random(width), random(height), random(3, 5));
+		particules.push(particule);
 	}
 }
 
 function draw() {
 	background(0);
+	qtree = new QuadTree(boundary, 5);
+	for (p of particules) {
+		qtree.insert(new Point(p.x, p.y, p));
+		p.move();
 
-	for (p of points) {
-		p.show(255, 255, 255);
+		let range = new Circle(p.x, p.y, p.r * 2)
+		let inRange = qtree.query(range);
+		for (pp of inRange) {
+			let other = pp.userData;
+			if (p !== other && p.intersects(other)) {
+				p.setHighlight(true);
+				other.setHighlight(true);
+			}
+		}
+		p.show();
+		p.setHighlight(false);
 	}
-
-	range = new Rectangle(mouseX, mouseY, 200, 200);
-	range.show(255, 0, 0);
-
-	inRange = qtree.query(range);
-	for (f of inRange) {
-		f.show(255, 0, 0);
-	}
+	fill(0, 255, 0);
 	text(floor(frameRate()), 50, 50);
 }
 
 function mousePressed() {
-	let point = new Point(mouseX, mouseY, 1);
-	qtree.insert(point);
-	points.push(point);
+	let particule = new Particule(mouseX, mouseY, random(3, 5));
+	qtree.insert(new Point(particule.x, particule.y, particule));
+	particules.push(particule);
 }
 
 function windowResized() {
 	resizeCanvas(windowWidth, windowHeight);
 	boundary = new Rectangle(width / 2, height / 2, width / 2, height / 2);
-	qtree = new QuadTree(boundary, 1);
-	for (p of points) {
+	qtree = new QuadTree(boundary, 5);
+	for (p of particules) {
 		qtree.insert(p);
 	}
 }
