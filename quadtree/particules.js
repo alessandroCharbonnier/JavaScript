@@ -7,7 +7,7 @@ class Particule {
 	}
 
 
-	setHighligh(value) {
+	setHighlight(value) {
 		this.highlight = value;
 	}
 

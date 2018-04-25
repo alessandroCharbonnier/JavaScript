@@ -13,12 +13,6 @@ class Point {
 			this.userData = userData;
 		}
 	}
-
-	show(r, g, b) {
-		noStroke();
-		fill(r, g, b);
-		ellipse(this.x, this.y, 4, 4);
-	}
 }
 
 class Circle {
@@ -42,8 +36,7 @@ class Circle {
 		if (!(point instanceof Point)) {
 			throw TypeError('make sure to pass to \'contains\' a Point type variable');
 		}
-		point.show(0, 0, 255);
-		let d = Math.pow((point.x - this.x), 2) + Math.pow((point.y - this.y), 2);
+		let d = (point.x - this.x) * (point.x - this.x) + (point.y - this.y) * (point.y - this.y);
 		return d <= this.rSquared;
 	}
 
@@ -55,24 +48,20 @@ class Circle {
 		let yDist = Math.abs(range.y - this.y);
 
 
-		let edges = Math.pow((xDist - range.w), 2) + Math.pow((yDist - range.h), 2);
+		let edges = (xDist - range.w) * (xDist - range.w) + (yDist - range.h) * (yDist - range.h);
 
 		// no intersection
-		if (xDist > (this.r + range.w) || yDist > (this.r + range.h))
+		if (xDist > (this.r + range.w) || yDist > (this.r + range.h)) {
 			return false;
+		}
 
 		// intersection within the circle
-		if (xDist <= range.w || yDist <= range.h)
+		if (xDist <= range.w || yDist <= range.h) {
 			return true;
+		}
 
 		// intersection on the edge of the circle
 		return edges <= this.rSquared;
-	}
-
-	show(r, g, b) {
-		noFill();
-		stroke(r, g, b);
-		ellipse(this.x, this.y, this.r * 2, this.r * 2);
 	}
 }
 
@@ -100,7 +89,6 @@ class Rectangle {
 		if (!(point instanceof Point)) {
 			throw TypeError('make sure to pass to \'contains\' a Point type variable');
 		}
-		point.show(0, 0, 255);
 		return (point.x >= this.x - this.w &&
 			point.x <= this.x + this.w &&
 			point.y >= this.y - this.h &&
@@ -115,13 +103,6 @@ class Rectangle {
 			range.x + range.w < this.x - this.w ||
 			range.y - range.h > this.y + this.h ||
 			range.y + range.h < this.y - this.h);
-	}
-
-	show(r, g, b) {
-		noFill();
-		stroke(r, g, b);
-		rectMode(CENTER);
-		rect(this.x, this.y, this.w * 2, this.h * 2);
 	}
 }
 
@@ -168,61 +149,42 @@ class QuadTree {
 		if (this.points.length < this.capacity) {
 			this.points.push(point);
 			this.length++;
-			console.log(this.size());
 			return true;
-		} else {
-			if (!this.divided) {
-				this.subdivide();
-			}
-			return (
-				this.northWest.insert(point) ||
-				this.northEast.insert(point) ||
-				this.southWest.insert(point) ||
-				this.southEast.insert(point)
-			);
 		}
+		if (!this.divided) {
+			this.subdivide();
+		}
+		return (
+			this.northWest.insert(point) ||
+			this.northEast.insert(point) ||
+			this.southWest.insert(point) ||
+			this.southEast.insert(point)
+		);
 	}
 
-	query(range, founds) {
+	query(range, pointsInRange) {
 		if (!((range instanceof Rectangle) || (range instanceof Circle))) {
 			throw TypeError('make sure to pass to \'query\' a Rectangle or Circle type variable');
 		}
 
-		if (!founds) {
-			founds = [];
+		if (!pointsInRange) {
+			pointsInRange = [];
 		}
 		if (!range.intersects(this.boundary)) {
-			return founds;
+			return pointsInRange;
 		}
 
 		for (let p of this.points) {
 			if (range.contains(p)) {
-				founds.push(p);
+				pointsInRange.push(p);
 			}
 		}
 		if (this.divided) {
-			this.northWest.query(range, founds);
-			this.northEast.query(range, founds);
-			this.southWest.query(range, founds);
-			this.southEast.query(range, founds);
+			this.northWest.query(range, pointsInRange);
+			this.northEast.query(range, pointsInRange);
+			this.southWest.query(range, pointsInRange);
+			this.southEast.query(range, pointsInRange);
 		}
-		return founds;
-	}
-
-	size() {
-		return this.length;
-	}
-
-	show(r, g, b) {
-		noFill();
-		stroke(r, g, b);
-		rectMode(CENTER);
-		rect(this.boundary.x, this.boundary.y, this.boundary.w * 2, this.boundary.h * 2);
-		if (this.divided) {
-			this.northWest.show();
-			this.northEast.show();
-			this.southWest.show();
-			this.southEast.show();
-		}
+		return pointsInRange;
 	}
 }

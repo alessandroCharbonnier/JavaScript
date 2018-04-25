@@ -29,6 +29,6 @@ class Particule {
 	}
 	show() {
 		stroke(0, 30);
-		point(this.pos.x, this.pos.y, 1, 1);
+		point(this.pos.x, this.pos.y);
 	}
 }
