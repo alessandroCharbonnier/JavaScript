@@ -10,14 +10,14 @@ class Drop {
 	}
 
 	fall() {
-		this.acc.add(this.gravity)
+		this.acc.add(this.gravity);
 		this.speed.add(this.acc);
 		this.pos.add(this.speed);
 		this.acc.mult(0);
 		this.len = map(this.speed.y, 0.12, 15, 4, 17);
 		if (this.pos.y > height) {
 			this.pos.y = -height;
-			this.speed = createVector(0, random(4, 10));;
+			this.speed = createVector(0, random(4, 10));
 		}
 	}
 
