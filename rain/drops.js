@@ -1,9 +1,9 @@
-var drops = []
+var drops = [];
 
 class Drop {
 	constructor() {
 		this.gravity = createVector(0, 0.12);
-		this.pos = createVector(random(width), random(-2*height, 0))
+		this.pos = createVector(random(width), random(-2 * height, 0))
 		this.speed = createVector(0, random(4, 10));
 		this.acc = createVector(0, 0);
 		this.len = 0;
