@@ -10,6 +10,7 @@ let scl = 20;
 let flying = 0;
 
 function setup() {
+	p5.disableFriendlyErrors = true;
 	createCanvas(windowWidth, windowHeight, WEBGL);
 
 	cols = w / scl;
@@ -38,9 +39,10 @@ function draw() {
 
 	background(0);
 	translate(0, 50);
-	rotateX(-PI / 3);
+	rotateX(PI / 3);
 	fill(200, 200, 200, 50);
-	stroke(255, 0, 0);
+	stroke(255);
+	// noStroke();
 	translate(-w / 2, -h / 2);
 	for (var y = 0; y < rows - 1; y++) {
 		beginShape(TRIANGLE_STRIP);
@@ -48,7 +50,7 @@ function draw() {
 			vertex(x * scl, y * scl, terrain[x][y]);
 			vertex(x * scl, (y + 1) * scl, terrain[x][y + 1]);
 		}
-		endShape(TRIANGLE_STRIP);
+		endShape();
 	}
 }
 

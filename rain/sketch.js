@@ -4,6 +4,8 @@ function setup() {
   for (let i = 0; i < 600; i++) {
     drops[i] = new Drop();
   }
+  fill(10, 215, 255, 100);
+  noStroke();
 }
 
 function draw() {
