@@ -1,6 +1,4 @@
-let squares = []
-
-class Square {
+class Flame {
 	constructor(x, y) {
 		this.r = 255;
 		this.pos = createVector(x, y);
@@ -19,11 +17,10 @@ class Square {
 	}
 
 	kill() {
-		for (let i = squares.length - 1; i >= 0; i--) {
-			if (squares[i].r < 0) {
-				squares.splice(i, 1);
-				squares.push(new Square(rocket.pos.x, rocket.pos.y));
-			}
+		if (this.r < 0) {
+			let index = rocket.flames.indexOf(this);
+			rocket.flames.splice(index, 1);
+			rocket.flames.push(new Flame(rocket.pos.x, rocket.pos.y));
 		}
 	}
 }

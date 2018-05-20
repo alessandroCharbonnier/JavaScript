@@ -4,7 +4,12 @@ class Rocket {
 	constructor() {
 		this.pos = createVector(random(width / 2), random(height));
 		this.vel = createVector();
+		this.flames = [];
+		for (let i = 0; i < 20; i++) {
+			this.flames.push(new Flame(this.pos.x, this.pos.y));
+		}
 	}
+
 
 	show() {
 		push();
@@ -23,7 +28,7 @@ class Rocket {
 	}
 
 	getangle(x, y) {
-		let a = Math.atan2(mouseY - y, mouseX - x);
+		let a = Math.atan2(t.pos.y - y, t.pos.x - x);
 		this.vel.x = lerp(this.vel.x, cos(a) * 10, 0.05);
 		this.vel.y = lerp(this.vel.y, sin(a) * 10, 0.05);
 	}
