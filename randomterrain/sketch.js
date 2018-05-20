@@ -4,7 +4,7 @@ let cols;
 let rows;
 
 let w = 3500;
-let h = 2000;
+let h = 2500;
 let scl = 20;
 
 let flying = 0;
@@ -40,9 +40,11 @@ function draw() {
 	background(0);
 	translate(0, 50);
 	rotateX(PI / 3);
-	fill(200, 200, 200, 50);
-	stroke(255);
-	// noStroke();
+	fill(0,255,255, 20);
+	//fill(200, 200, 200, 50);
+	//stroke(0,180,220, 50);
+	 noStroke();
+	 strokeWeight(1);
 	translate(-w / 2, -h / 2);
 	for (var y = 0; y < rows - 1; y++) {
 		beginShape(TRIANGLE_STRIP);
