@@ -28,6 +28,7 @@ function setup() {
 }
 
 function draw() {
+	frameRate(60);
 	background(255);
 	fill(0);
 	noStroke();
@@ -40,12 +41,7 @@ function draw() {
 			textSize(20);
 			noLoop();
 			accuracy = getAccuracy();
-			let data = {
-				name: name,
-				score: score,
-				accuracy: accuracy,
-			};
-			writeScore(data);
+			writeScore(score, accuracy, name);
 			break;
 		}
 	}
@@ -64,7 +60,6 @@ function mousePressed() {
 }
 
 function keyPressed() {
-	clicks++;
 	for (let i = 0; i < bubbles.length; i++) {
 		bubbles[i].clicked();
 	}
