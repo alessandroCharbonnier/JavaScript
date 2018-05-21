@@ -1,8 +1,14 @@
 let birdright;
 let birdleft;
-let bird;
+let savedBirds = [];
+let birds = [];
 let spike;
-let score = 0;
+let doYouKnowDaWae;
+let generation = 0;
+let loopt = 1;
+const imgWidth = 80 * 0.75;
+const imgHeight = 53 * 0.75;
+const TOTAL = 150;
 
 function preload() {
 	birdright = loadImage('birdright.png');
@@ -11,10 +17,12 @@ function preload() {
 
 function setup() {
 	createCanvas(windowWidth, windowHeight);
-
-	bird = new Bird();
 	spike = new Spike();
-	textAlign(CENTER, CENTER);
+	for (var i = 0; i < TOTAL; i++) {
+		birds[i] = new Bird();
+	}
+	doYouKnowDaWae = birds[0].vel.x;
+	spike.swap();
 }
 
 function draw() {
@@ -22,25 +30,56 @@ function draw() {
 
 	fill(255);
 	noStroke();
-	textSize(10);
-	text(floor(frameRate()), 10, 10);
+	textSize(15);
+	textAlign(LEFT, CENTER);
+	text('fps : ' + floor(frameRate()), 10, 10);
+	text('generation : ' + generation, 10, 25);
 	textSize(150);
-	text(score, width * 0.5, height * 0.5);
+	textAlign(CENTER, CENTER);
+	text(birds[0].points, width * 0.5, height * 0.5);
 
-	bird.update();
-	bird.show();
+	for (let i = 0; i < loopt; i++) {
 
-	if (spike.intersect(bird)) {
-		console.log('yes');
-		bird.reset();
-		score = 0;
+		for (let i = birds.length - 1; i >= 0; i--) {
+			birds[i].think();
+			birds[i].update();
+			spike.swap();
+			if (birds[i].edges()) {
+				spike.fillSpikes();
+			}
+
+			if (spike.intersect(birds[i])) {
+				savedBirds.push(birds.splice(i, 1)[0]);
+			}
+		}
+
+		if (birds.length === 0) {
+			nextGeneration();
+		}
+	}
+
+	for (bird of birds) {
+		bird.show();
 	}
 	spike.show();
+
 }
 
-function keyPressed() {
+function findHoll() {
+	while (true) {
+		let i = floor(random(spike.spikes.length));
+		if (spike.spikes[i].obstacle) {
+			return spike.spikes[i].p2;
+		}
+	}
+}
+
+
+function keyIsPressed() {
 	if (key == ' ') {
-		bird.up();
+		loopt++;
+	} else {
+		loopt--;
 	}
 }
 
