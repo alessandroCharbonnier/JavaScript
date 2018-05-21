@@ -6,6 +6,7 @@ class Bird {
 		this.gravity = createVector(0, 0.8);
 		this.img = birdright;
 		this.score = 0;
+		this.points = 0;
 		this.fitness = 0;
 		if (brain) {
 			this.brain = brain.copy();
