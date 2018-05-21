@@ -9,6 +9,7 @@ let loopt = 1;
 const imgWidth = 80 * 0.75;
 const imgHeight = 53 * 0.75;
 const TOTAL = 150;
+let slider;
 
 function preload() {
 	birdright = loadImage('birdright.png');
@@ -23,6 +24,7 @@ function setup() {
 	}
 	doYouKnowDaWae = birds[0].vel.x;
 	spike.swap();
+	slider = createSlider(1, 100, 1)
 }
 
 function draw() {
@@ -34,11 +36,12 @@ function draw() {
 	textAlign(LEFT, CENTER);
 	text('fps : ' + floor(frameRate()), 10, 10);
 	text('generation : ' + generation, 10, 25);
+	text('loops/frames : ' + slider.value(), 10, 45);
 	textSize(150);
 	textAlign(CENTER, CENTER);
 	text(birds[0].points, width * 0.5, height * 0.5);
 
-	for (let i = 0; i < loopt; i++) {
+	for (let i = 0; i < slider.value(); i++) {
 
 		for (let i = birds.length - 1; i >= 0; i--) {
 			birds[i].think();
