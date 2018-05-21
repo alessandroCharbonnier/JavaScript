@@ -29,7 +29,6 @@ function pickOne() {
 function calculateFitness() {
 	let sum = 0;
 	for (bird of savedBirds) {
-		bird.score = bird.time + Math.exp(bird.points);
 		sum += bird.score;
 	}
 

@@ -5,9 +5,7 @@ class Bird {
 		this.acc = createVector(0, 0);
 		this.gravity = createVector(0, 0.8);
 		this.img = birdright;
-		this.time = 0;
 		this.score = 0;
-		this.points = 0;
 		this.fitness = 0;
 		if (brain) {
 			this.brain = brain.copy();
@@ -33,7 +31,7 @@ class Bird {
 	}
 
 	update() {
-		this.time;
+		this.score++;
 		doYouKnowDaWae = this.vel.x;
 		this.acc = this.gravity;
 		this.vel.add(this.acc);
