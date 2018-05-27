@@ -17,14 +17,14 @@ function preload() {
 }
 
 function setup() {
-	createCanvas(windowWidth - 10, windowHeight - 30);
+	createCanvas(windowWidth - 20, windowHeight - 20);
 	spike = new Spike();
 	for (var i = 0; i < TOTAL; i++) {
 		birds[i] = new Bird();
 	}
 	doYouKnowDaWae = birds[0].vel.x;
 	spike.swap();
-	slider = createSlider(1, 30, 1);
+	slider = createSlider(1, 100, 1);
 }
 
 function draw() {
@@ -43,6 +43,7 @@ function draw() {
 	text(birds[0].points, width * 0.5, height * 0.5);
 
 	for (let i = 0; i < slider.value(); i++) {
+		doYouKnowDaWae = birds[0].vel.x;
 
 		for (let i = birds.length - 1; i >= 0; i--) {
 			birds[i].think();
@@ -72,12 +73,12 @@ function findHoll() {
 	for (s of spike.spikes) {
 		if (!s.obstacle) {
 			let n = s.p2;
-			n.y += 20;
+			//n.y += 20;
 			return n;
 		}
 	}
 }
 
 function windowResized() {
-	resizeCanvas(windowWidth, windowHeight);
+	resizeCanvas(windowWidth - 20, windowHeight - 20);
 }
