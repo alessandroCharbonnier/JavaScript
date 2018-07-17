@@ -7,7 +7,7 @@ class Spike {
 	}
 
 	fillSpikes() {
-		let count = 0;
+		// let count = 0;
 		this.spikes = [];
 		for (let i = 0; i < height / imgHeight; i++) {
 			if (doYouKnowDaWae < 0) {
@@ -35,7 +35,7 @@ class Spike {
 		// if (count === this.spikes.length) {
 		let i = floor(random(1, this.spikes.length - 2));
 		this.spikes[i].obstacle = false;
-		//this.spikes[i + 1].obstacle = false;
+		// this.spikes[i + 1].obstacle = false;
 		// }
 	}
 
