@@ -10,7 +10,7 @@ class Bubble {
 	}
 
 	clicked() {
-		let d = dist(mouseX, mouseY, this.x, this.y)
+		let d = dist(mouseX, mouseY, this.x, this.y);
 		if (d < this.r && !this.click) {
 			this.col = color(255, 0, 255);
 			this.click = true;
