@@ -53,7 +53,7 @@ function displayGrid() {
 function getCurrentTime() {
   let dateStop = new Date;
   let timeStop = dateStop.getTime();
-  let millissecs = (timeStop - timeStart) % 1000;
+  let millissecs = millis();
   let seconds = floor((timeStop - timeStart) / 1000);
   let second = seconds % 60;
   let minutes = floor(seconds / 60);
