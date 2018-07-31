@@ -15,9 +15,7 @@ class Head {
 			this.current = openSet[this.lowestIndex];
 
 			if (this.current === end) {
-				noLoop();
-				console.log('done!');
-				displayGrid();
+				return true;
 			}
 
 			removeFrom(openSet, this.current);

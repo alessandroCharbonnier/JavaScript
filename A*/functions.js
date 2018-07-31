@@ -42,18 +42,14 @@ function windowResized() {
 }
 
 function displayGrid() {
-  for (let i = 0; i < closedSet.length; i++) {
-    closedSet[i].show(color(255, 0, 0, 5));
-  }
-  for (let i = 0; i < openSet.length; i++) {
-    openSet[i].show(color(0, 255, 0, 30));
-  }
+  for (let i = 0; i < closedSet.length; closedSet[i++].show(color(255, 0, 0, 5))) {}
+  for (let i = 0; i < openSet.length; openSet[i++].show(color(0, 255, 0, 30))) {}
 }
 
 function getCurrentTime() {
   let dateStop = new Date;
   let timeStop = dateStop.getTime();
-  let millissecs = millis();
+  let millissecs = millis() % 1000;
   let seconds = floor((timeStop - timeStart) / 1000);
   let second = seconds % 60;
   let minutes = floor(seconds / 60);

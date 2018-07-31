@@ -78,7 +78,12 @@ function draw() {
   image(img, 0, 0);
 
   for (head of heads) {
-    head.run();
+    if(head.run()) {
+      console.log('done!');
+      displayGrid();
+      noLoop();
+      break;
+    }
   }
 
   for (let i = 1; i < heads.length - 1; i++) {
