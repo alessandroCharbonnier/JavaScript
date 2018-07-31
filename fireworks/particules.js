@@ -9,8 +9,10 @@ class Particule {
 
 
 	show() {
-		fill(this.col, this.a);
-		ellipse(this.pos.x, this.pos.y, 3, 3);
+		if (this.r < this.pos.x && this.pos.x < (width + this.r) && this.r < this.pos.y && this.pos.y < (height + this.r)) {
+			fill(this.col, this.a);
+		 	ellipse(this.pos.x, this.pos.y, 3, 3);
+		}
 	}
 
 	move() {
