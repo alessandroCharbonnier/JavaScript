@@ -26,9 +26,6 @@ function drawSquares() {
     for (let j = TOTAL_LINE - 1; j >= 0; j--) {
       if (board[i][j] !== undefined) {
         board[i][j].show();
-        if (board[i][j].hp <= 0) {
-          board[i][j] = undefined;
-        }
       }
     }
   }

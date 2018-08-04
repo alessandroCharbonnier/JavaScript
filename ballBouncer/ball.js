@@ -41,6 +41,9 @@ class Ball {
             if (inter !== 0) {
               board[i][j].hp--;
               score++;
+              if (board[i][j].hp <= 0) {
+                board[i][j] = undefined;
+              }
               if (inter === 1) {
                 this.vel.x *= -1;
               } else if (inter === 2) {
