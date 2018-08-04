@@ -50,7 +50,7 @@ function mouseClicked() {
     let i = 0;
     let timer = setInterval(function() {
       balls[i++].fireAngle(x, y);
-      if (i >= balls.length) clearTimeout(timer);
+      if (i >= balls.length) clearInterval(timer);
     }, 50);
   }
 }
