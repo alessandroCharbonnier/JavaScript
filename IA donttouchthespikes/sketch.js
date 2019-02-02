@@ -12,12 +12,12 @@ const TOTAL = 150;
 let slider;
 
 function preload() {
-	birdright = loadImage('birdright.png');
-	birdleft = loadImage('birdleft.png');
+	birdright = loadImage("./images/birdright.png");
+	birdleft = loadImage("./images/birdleft.png");
 }
 
 function setup() {
-	createCanvas(windowWidth - 20, windowHeight - 20);
+	createCanvas(windowHeight * 0.56, windowHeight - 20);
 	spike = new Spike();
 	for (var i = 0; i < TOTAL; i++) {
 		birds[i] = new Bird();
@@ -34,10 +34,10 @@ function draw() {
 	noStroke();
 	textSize(16);
 	textAlign(LEFT, CENTER);
-	text('fps : ' + floor(frameRate()), 10, 10);
-	text('generation : ' + generation, 10, 26);
-	text('birds alive : ' + birds.length, 10, 43);
-	text('loops/frames : ' + slider.value(), 10, 60);
+	text("fps : " + floor(frameRate()), 10, 10);
+	text("generation : " + generation, 10, 26);
+	text("birds alive : " + birds.length, 10, 43);
+	text("loops/frames : " + slider.value(), 10, 60);
 	textSize(150);
 	textAlign(CENTER, CENTER);
 	text(birds[0].points, width * 0.5, height * 0.5);
