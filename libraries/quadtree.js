@@ -1,190 +1,232 @@
-class Point {
-	constructor(x, y, userData) {
-		if (typeof x !== 'number') {
-			throw TypeError(`element.x should be a number but is a ${typeof element.x}`);
-		}
-		if (typeof y !== 'number') {
-			throw TypeError(`element.y should be a number but is a ${typeof element.y}`);
-		}
+/*
+ * Javascript Quadtree
+ * @version 1.1.1
+ * @licence MIT
+ * @author Timo Hausmann
+ * https://github.com/timohausmann/quadtree-js/
+ */
 
-		this.x = x;
-		this.y = y;
-		if (userData) {
-			this.userData = userData;
-		}
-	}
-}
+/*
+ Copyright © 2012 Timo Hausmann
 
-class Circle {
-	constructor(x, y, r) {
-		if (typeof x !== 'number') {
-			throw TypeError(`x should be a number but is a ${typeof x}`);
-		}
-		if (typeof y !== 'number') {
-			throw TypeError(`y should be a number but is a ${typeof y}`);
-		}
-		if (typeof r !== 'number') {
-			throw TypeError(`r should be a number but is a ${typeof r}`);
-		}
-		this.x = x;
-		this.y = y;
-		this.r = r;
-		this.rSquared = this.r * this.r;
-	}
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
 
-	contains(point) {
-		if (!(point instanceof Point)) {
-			throw TypeError('make sure to pass to \'contains\' a Point type variable');
-		}
-		let d = (point.x - this.x) * (point.x - this.x) + (point.y - this.y) * (point.y - this.y);
-		return d <= this.rSquared;
-	}
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
 
-	intersects(range) {
-		if (!((range instanceof Rectangle) || (range instanceof Circle))) {
-			throw TypeError('make sure to pass to \'intersects\' a Rectangle or Circle type variable');
-		}
-		let xDist = Math.abs(range.x - this.x);
-		let yDist = Math.abs(range.y - this.y);
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENthis. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
 
+(function(window, Math) {
+	/*
+	 * Quadtree Constructor
+	 * @param Object bounds		bounds of the node, object with x, y, width, height
+	 * @param Integer max_objects		(optional) max objects a node can hold before splitting into 4 subnodes (default: 10)
+	 * @param Integer max_levels		(optional) total max levels inside root Quadtree (default: 4)
+	 * @param Integer level		(optional) deepth level, required for subnodes
+	 */
+	function Quadtree(bounds, max_objects, max_levels, level) {
+		this.max_objects = max_objects || 10;
+		this.max_levels = max_levels || 4;
 
-		let edges = (xDist - range.w) * (xDist - range.w) + (yDist - range.h) * (yDist - range.h);
+		this.level = level || 0;
+		this.bounds = bounds;
 
-		// no intersection
-		if (xDist > (this.r + range.w) || yDist > (this.r + range.h)) {
-			return false;
-		}
-
-		// intersection within the circle
-		if (xDist <= range.w || yDist <= range.h) {
-			return true;
-		}
-
-		// intersection on the edge of the circle
-		return edges <= this.rSquared;
-	}
-}
-
-class Rectangle {
-	constructor(x, y, w, h) {
-		if (typeof x !== 'number') {
-			throw TypeError(`x should be a number but is a ${typeof x}`);
-		}
-		if (typeof y !== 'number') {
-			throw TypeError(`y should be a number but is a ${typeof y}`);
-		}
-		if (typeof w !== 'number') {
-			throw TypeError(`w should be a number but is a ${typeof w}`);
-		}
-		if (typeof h !== 'number') {
-			throw TypeError(`h should be a number but is a ${typeof h}`);
-		}
-		this.x = x;
-		this.y = y;
-		this.w = w;
-		this.h = h;
+		this.objects = [];
+		this.nodes = [];
 	}
 
-	contains(point) {
-		if (!(point instanceof Point)) {
-			throw TypeError('make sure to pass to \'contains\' a Point type variable');
-		}
-		return (point.x >= this.x - this.w &&
-			point.x <= this.x + this.w &&
-			point.y >= this.y - this.h &&
-			point.y <= this.y + this.h);
-	}
+	/*
+	 * Split the node into 4 subnodes
+	 */
+	Quadtree.prototype.split = function() {
+		var nextLevel = this.level + 1,
+			subWidth = Math.round(this.bounds.width / 2),
+			subHeight = Math.round(this.bounds.height / 2),
+			x = Math.round(this.bounds.x),
+			y = Math.round(this.bounds.y);
 
-	intersects(range) {
-		if (!((range instanceof Rectangle) || (range instanceof Circle))) {
-			throw TypeError('make sure to pass to \'intersects\' a Rectangle or Circle type variable');
-		}
-		return !(range.x - range.w > this.x + this.w ||
-			range.x + range.w < this.x - this.w ||
-			range.y - range.h > this.y + this.h ||
-			range.y + range.h < this.y - this.h);
-	}
-}
-
-class QuadTree {
-	constructor(boundary, capacity) {
-		if (!boundary) {
-			throw TypeError('boundary is null or undefined');
-		}
-		if (!(boundary instanceof Rectangle)) {
-			throw TypeError('boundary should be a Rectangle');
-		}
-		if (!capacity) {
-			throw TypeError('boundary is null or undefined');
-		}
-		if (typeof capacity !== 'number') {
-			throw TypeError(`capacity should be a number but is a ${typeof capacity}`);
-		}
-		if (capacity < 1) {
-			throw RangeError('capacity must be greater than 0');
-		}
-		this.boundary = boundary;
-		this.capacity = capacity;
-		this.points = [];
-		this.divided = false;
-		this.length = 0;
-	}
-
-	subdivide() {
-		this.northWest = new QuadTree(new Rectangle(this.boundary.x - this.boundary.w / 2, this.boundary.y - this.boundary.h / 2, this.boundary.w / 2, this.boundary.h / 2), this.capacity);
-		this.northEast = new QuadTree(new Rectangle(this.boundary.x + this.boundary.w / 2, this.boundary.y - this.boundary.h / 2, this.boundary.w / 2, this.boundary.h / 2), this.capacity);
-		this.southWest = new QuadTree(new Rectangle(this.boundary.x - this.boundary.w / 2, this.boundary.y + this.boundary.h / 2, this.boundary.w / 2, this.boundary.h / 2), this.capacity);
-		this.southEast = new QuadTree(new Rectangle(this.boundary.x + this.boundary.w / 2, this.boundary.y + this.boundary.h / 2, this.boundary.w / 2, this.boundary.h / 2), this.capacity);
-		this.divided = true;
-	}
-
-	insert(point) {
-		if (!(point instanceof Point)) {
-			throw TypeError('make sure to pass to \'insert\' a Point type variable');
-		}
-		if (!this.boundary.contains(point)) {
-			return false;
-		}
-
-		if (this.points.length < this.capacity) {
-			this.points.push(point);
-			this.length++;
-			return true;
-		}
-		if (!this.divided) {
-			this.subdivide();
-		}
-		return (
-			this.northWest.insert(point) ||
-			this.northEast.insert(point) ||
-			this.southWest.insert(point) ||
-			this.southEast.insert(point)
+		//top right node
+		this.nodes[0] = new Quadtree(
+			{
+				x: x + subWidth,
+				y: y,
+				width: subWidth,
+				height: subHeight
+			},
+			this.max_objects,
+			this.max_levels,
+			nextLevel
 		);
-	}
 
-	query(range, pointsInRange) {
-		if (!((range instanceof Rectangle) || (range instanceof Circle))) {
-			throw TypeError('make sure to pass to \'query\' a Rectangle or Circle type variable');
-		}
+		//top left node
+		this.nodes[1] = new Quadtree(
+			{
+				x: x,
+				y: y,
+				width: subWidth,
+				height: subHeight
+			},
+			this.max_objects,
+			this.max_levels,
+			nextLevel
+		);
 
-		if (!pointsInRange) {
-			pointsInRange = [];
-		}
-		if (!range.intersects(this.boundary)) {
-			return pointsInRange;
-		}
+		//bottom left node
+		this.nodes[2] = new Quadtree(
+			{
+				x: x,
+				y: y + subHeight,
+				width: subWidth,
+				height: subHeight
+			},
+			this.max_objects,
+			this.max_levels,
+			nextLevel
+		);
 
-		for (let p of this.points) {
-			if (range.contains(p)) {
-				pointsInRange.push(p);
+		//bottom right node
+		this.nodes[3] = new Quadtree(
+			{
+				x: x + subWidth,
+				y: y + subHeight,
+				width: subWidth,
+				height: subHeight
+			},
+			this.max_objects,
+			this.max_levels,
+			nextLevel
+		);
+	};
+
+	/*
+	 * Determine which node the object belongs to
+	 * @param Object pRect		bounds of the area to be checked, with x, y, width, height
+	 * @return Integer		index of the subnode (0-3), or -1 if pRect cannot completely fit within a subnode and is part of the parent node
+	 */
+	Quadtree.prototype.getIndex = function(pRect) {
+		var index = -1,
+			verticalMidpoint = this.bounds.x + this.bounds.width / 2,
+			horizontalMidpoint = this.bounds.y + this.bounds.height / 2,
+			//pRect can completely fit within the top quadrants
+			topQuadrant = pRect.y < horizontalMidpoint && pRect.y + pRect.height < horizontalMidpoint,
+			//pRect can completely fit within the bottom quadrants
+			bottomQuadrant = pRect.y > horizontalMidpoint;
+
+		//pRect can completely fit within the left quadrants
+		if (pRect.x < verticalMidpoint && pRect.x + pRect.width < verticalMidpoint) {
+			if (topQuadrant) {
+				index = 1;
+			} else if (bottomQuadrant) {
+				index = 2;
+			}
+
+			//pRect can completely fit within the right quadrants
+		} else if (pRect.x > verticalMidpoint) {
+			if (topQuadrant) {
+				index = 0;
+			} else if (bottomQuadrant) {
+				index = 3;
 			}
 		}
-		if (this.divided) {
-			this.northWest.query(range, pointsInRange);
-			this.northEast.query(range, pointsInRange);
-			this.southWest.query(range, pointsInRange);
-			this.southEast.query(range, pointsInRange);
+
+		return index;
+	};
+
+	/*
+	 * Insert the object into the node. If the node
+	 * exceeds the capacity, it will split and add all
+	 * objects to their corresponding subnodes.
+	 * @param Object pRect		bounds of the object to be added, with x, y, width, height
+	 */
+	Quadtree.prototype.insert = function(pRect) {
+		var i = 0,
+			index;
+
+		//if we have subnodes ...
+		if (typeof this.nodes[0] !== "undefined") {
+			index = this.getIndex(pRect);
+
+			if (index !== -1) {
+				this.nodes[index].insert(pRect);
+				return;
+			}
 		}
-		return pointsInRange;
-	}
-}
+
+		this.objects.push(pRect);
+
+		if (this.objects.length > this.max_objects && this.level < this.max_levels) {
+			//split if we don't already have subnodes
+			if (typeof this.nodes[0] === "undefined") {
+				this.split();
+			}
+
+			//add all objects to there corresponding subnodes
+			while (i < this.objects.length) {
+				index = this.getIndex(this.objects[i]);
+
+				if (index !== -1) {
+					this.nodes[index].insert(this.objects.splice(i, 1)[0]);
+				} else {
+					i = i + 1;
+				}
+			}
+		}
+	};
+
+	/*
+	 * Return all objects that could collide with the given object
+	 * @param Object pRect		bounds of the object to be checked, with x, y, width, height
+	 * @Return Array		array with all detected objects
+	 */
+	Quadtree.prototype.retrieve = function(pRect) {
+		var index = this.getIndex(pRect),
+			returnObjects = this.objects;
+
+		//if we have subnodes ...
+		if (typeof this.nodes[0] !== "undefined") {
+			//if pRect fits into a subnode ..
+			if (index !== -1) {
+				returnObjects = returnObjects.concat(this.nodes[index].retrieve(pRect));
+
+				//if pRect does not fit into a subnode, check it against all subnodes
+			} else {
+				for (var i = 0; i < this.nodes.length; i = i + 1) {
+					returnObjects = returnObjects.concat(this.nodes[i].retrieve(pRect));
+				}
+			}
+		}
+
+		return returnObjects;
+	};
+
+	/*
+	 * Clear the quadtree
+	 */
+	Quadtree.prototype.clear = function() {
+		this.objects = [];
+
+		for (var i = 0; i < this.nodes.length; i = i + 1) {
+			if (typeof this.nodes[i] !== "undefined") {
+				this.nodes[i].clear();
+			}
+		}
+
+		this.nodes = [];
+	};
+
+	//make Quadtree available in the global namespace
+	window.Quadtree = Quadtree;
+})(window, Math);
