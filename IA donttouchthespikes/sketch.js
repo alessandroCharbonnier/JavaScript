@@ -40,7 +40,7 @@ function draw() {
 	text("loops/frames : " + slider.value(), 10, 60);
 	textSize(150);
 	textAlign(CENTER, CENTER);
-	text(birds[0].points, width * 0.5, height * 0.5);
+	text(birds[0].points.toLocaleString("en-US", { minimumIntegerDigits: 2, useGrouping: false }), width * 0.5, height * 0.5);
 
 	for (let i = 0; i < slider.value(); i++) {
 		doYouKnowDaWae = birds[0].vel.x;
