@@ -1,5 +1,6 @@
 let vehicules = [];
 const NUMVEHICULES = 60;
+const SPAWNGAP = 25;
 let maxDist;
 
 function setup() {
@@ -7,7 +8,7 @@ function setup() {
 	createCanvas(windowWidth, windowHeight);
 	maxDist = dist(0, 0, width, height);
 	for (let i = 0; i < NUMVEHICULES; i++) {
-		vehicules.push(new Vehicule(random(width), random(height)));
+		vehicules.push(new Vehicule(random(SPAWNGAP, width - SPAWNGAP), random(SPAWNGAP, height - SPAWNGAP)));
 	}
 }
 
