@@ -1,4 +1,3 @@
-let qtree;
 let vehicules = [];
 const NUMVEHICULES = 60;
 let maxDist;
@@ -19,11 +18,10 @@ function draw() {
 	// draw all vehicules
 	for (let i = vehicules.length - 1; i >= 0; i--) {
 		const vehicule = vehicules[i];
-		vehicule.update();
-		vehicule.draw();
+		vehicule.run();
 	}
 
-	// draw informations
+	// draw infos
 	fill(255);
 	noStroke();
 	text("fps : " + floor(frameRate()), 10, 15);
