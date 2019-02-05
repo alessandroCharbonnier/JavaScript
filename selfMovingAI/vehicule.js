@@ -1,11 +1,15 @@
 class Vehicule {
-	constructor(x, y) {
+	constructor(x, y, id) {
 		this.pos = createVector(x, y);
 		this.angle = random(90);
-		this.vel = createVector(cos(this.angle) * 1.5, sin(this.angle) * 1.5);
-		this.brain = new NeuralNetwork(4, 5, 1);
+		this.vel = createVector(cos(this.angle) * 3, sin(this.angle) * 3);
+		this.brain = new NeuralNetwork(4, 15, 1);
 		this.r = 5;
 		this.intersect = false;
+		this.score = 0;
+		this.fitness = 0;
+		this.parents = [];
+		this.id = id;
 	}
 
 	run() {
@@ -14,20 +18,21 @@ class Vehicule {
 	}
 
 	update() {
-		if (this.intersect === true) {
+		if (this.intersect) {
 			return;
 		}
 		let closest;
 		let d = Infinity;
-		for (let i = 0; i < vehicules.length; i++) {
-			if (this !== vehicules[i]) {
-				let temp = dist(this.pos.x, this.pos.y, vehicules[i].pos.x, vehicules[i].pos.y);
+		for (let i = 0; i < generation.species.length; i++) {
+			if (this !== generation.species[i]) {
+				let temp = dist(this.pos.x, this.pos.y, generation.species[i].pos.x, generation.species[i].pos.y);
 				if (temp < d) {
 					d = temp;
-					closest = vehicules[i];
+					closest = generation.species[i];
 				}
 				if (d < this.r * 3) {
 					this.intersect = true;
+					this.score = log(this.score);
 				}
 			}
 		}
@@ -40,20 +45,22 @@ class Vehicule {
 
 		let output = this.brain.predict(inputs);
 		this.angle = output * 360;
-		this.vel = createVector(cos(this.angle) * 1.5, sin(this.angle) * 1.5);
+		this.vel = createVector(cos(this.angle) * 3, sin(this.angle) * 3);
 		this.pos.add(this.vel);
 
 		this.edges();
+		this.score++;
 	}
 
 	edges() {
-		if (this.pos.x < -this.r || this.pos.y < -this.r || this.pos.x > width + this.r || this.pos.y > height + this.r) {
-			this.intersect = true;
-		}
+		if (this.pos.x < -this.r) this.pos.x = width;
+		if (this.pos.y < -this.r) this.pos.y = height;
+		if (this.pos.x > width + this.r) this.pos.x = 0;
+		if (this.pos.y > height + this.r) this.pos.y = 0;
 	}
 
 	clone() {
-		let newVehicule = new Vehicule(random(SPAWNGAP, width - SPAWNGAP), random(SPAWNGAP, height - SPAWNGAP));
+		let newVehicule = new Vehicule(random(SPAWNGAP, width - SPAWNGAP), random(SPAWNGAP, height - SPAWNGAP), this.id);
 		newVehicule.brain.dispose();
 		newVehicule.brain = this.brain.clone();
 		return newVehicule;
