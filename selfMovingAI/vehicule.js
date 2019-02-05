@@ -2,14 +2,15 @@ class Vehicule {
 	constructor(x, y, id) {
 		this.pos = createVector(x, y);
 		this.angle = random(90);
-		this.vel = createVector(cos(this.angle) * 3, sin(this.angle) * 3);
-		this.brain = new NeuralNetwork(4, 15, 1);
+		this.vel = createVector(cos(this.angle) * this.speed, sin(this.angle) * this.speed);
+		this.brain = new NeuralNetwork(4, 1, 1);
 		this.r = 5;
 		this.intersect = false;
 		this.score = 0;
 		this.fitness = 0;
 		this.parents = [];
 		this.id = id;
+		this.speed = random(2, 5);
 	}
 
 	run() {
@@ -30,9 +31,8 @@ class Vehicule {
 					d = temp;
 					closest = generation.species[i];
 				}
-				if (d < this.r * 3) {
+				if (d < this.r * this.speed) {
 					this.intersect = true;
-					this.score = log(this.score);
 				}
 			}
 		}
@@ -45,7 +45,7 @@ class Vehicule {
 
 		let output = this.brain.predict(inputs);
 		this.angle = output * 360;
-		this.vel = createVector(cos(this.angle) * 3, sin(this.angle) * 3);
+		this.vel = createVector(cos(this.angle) * this.speed, sin(this.angle) * this.speed);
 		this.pos.add(this.vel);
 
 		this.edges();
@@ -53,10 +53,14 @@ class Vehicule {
 	}
 
 	edges() {
-		if (this.pos.x < -this.r) this.pos.x = width;
-		if (this.pos.y < -this.r) this.pos.y = height;
-		if (this.pos.x > width + this.r) this.pos.x = 0;
-		if (this.pos.y > height + this.r) this.pos.y = 0;
+		// if (this.pos.x < -this.r) this.pos.x = width;
+		// if (this.pos.y < -this.r) this.pos.y = height;
+		// if (this.pos.x > width + this.r) this.pos.x = 0;
+		// if (this.pos.y > height + this.r) this.pos.y = 0;
+
+		if (this.pos.x < -this.r || this.pos.y < -this.r || this.pos.x > width + this.r || this.pos.y > height + this.r) {
+			this.intersect = true;
+		}
 	}
 
 	clone() {

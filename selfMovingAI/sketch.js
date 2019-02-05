@@ -1,5 +1,5 @@
 let vehicules = [];
-const NUMVEHICULES = 80;
+const NUMVEHICULES = 40;
 const SPAWNGAP = 25;
 const generationPeriod = 20;
 let generation = new Generation(NUMVEHICULES);
