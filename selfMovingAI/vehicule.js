@@ -2,15 +2,15 @@ class Vehicule {
 	constructor(x, y, id) {
 		this.pos = createVector(x, y);
 		this.angle = random(90);
+		this.speed = 3 || random(2, 5);
 		this.vel = createVector(cos(this.angle) * this.speed, sin(this.angle) * this.speed);
-		this.brain = new NeuralNetwork(4, 1, 1);
+		this.brain = new NeuralNetwork(4, 12, 1);
 		this.r = 5;
 		this.intersect = false;
 		this.score = 0;
 		this.fitness = 0;
 		this.parents = [];
 		this.id = id;
-		this.speed = random(2, 5);
 	}
 
 	run() {
@@ -32,7 +32,8 @@ class Vehicule {
 					closest = generation.species[i];
 				}
 				if (d < this.r * this.speed) {
-					this.intersect = true;
+					this.die();
+					return;
 				}
 			}
 		}
@@ -59,7 +60,7 @@ class Vehicule {
 		// if (this.pos.y > height + this.r) this.pos.y = 0;
 
 		if (this.pos.x < -this.r || this.pos.y < -this.r || this.pos.x > width + this.r || this.pos.y > height + this.r) {
-			this.intersect = true;
+			this.die();
 		}
 	}
 
@@ -111,6 +112,11 @@ class Vehicule {
 		child.brain.output_weights = tf.tensor(child_out_dna, output_shape);
 
 		return child;
+	}
+
+	die() {
+		this.intersect = true;
+		vehiculesAlives--;
 	}
 
 	draw() {

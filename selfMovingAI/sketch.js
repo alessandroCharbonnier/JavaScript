@@ -1,22 +1,21 @@
 let vehicules = [];
 const NUMVEHICULES = 40;
 const SPAWNGAP = 25;
+let vehiculesAlives = NUMVEHICULES;
 const generationPeriod = 20;
 let generation = new Generation(NUMVEHICULES);
 let maxDist;
+let interval;
 
 function setup() {
 	frameRate(60);
 	createCanvas(windowWidth, windowHeight);
 	maxDist = dist(0, 0, width, height);
 	generation.initialize();
+	interval = setTimeout(() => generation.evolve(), 20000);
 	// for (let i = 0; i < NUMVEHICULES; i++) {
 	// 	vehicules.push(new Vehicule(random(SPAWNGAP, width - SPAWNGAP), random(SPAWNGAP, height - SPAWNGAP)));
 	// }
-
-	setInterval(() => {
-		generation.evolve();
-	}, generationPeriod * 1000);
 }
 
 function draw() {
@@ -27,6 +26,12 @@ function draw() {
 	for (let i = generation.species.length - 1; i >= 0; i--) {
 		const vehicule = generation.species[i];
 		vehicule.run();
+		if (vehiculesAlives < 1) {
+			vehiculesAlives = NUMVEHICULES;
+			generation.evolve();
+			clearInterval(interval);
+			interval = setTimeout(() => generation.evolve(), 20000);
+		}
 	}
 
 	// draw infos
